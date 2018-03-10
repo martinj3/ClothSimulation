@@ -27,7 +27,49 @@ $(document).ready(function() {
     }
     
     
-
+    
+    function Vector(X,Y,Z) {
+        this.x = X;
+        this.y = Y;
+        this.z = Z;
+        // add(Vector b)
+        this.add = function(b) {
+            return new Vector(this.x + b.x, this.y + b.y, this.z + b.z);
+        }
+        // subtract(Vector b)
+        this.subtract = function(b) {
+            return new Vector(this.x - b.x, this.y - b.y, this.z - b.z);
+        }
+        // scale(Number a)
+        this.scale = function(a) {
+            return new Vector(a*this.x, a*this.y, a*this.z);
+        }
+        // dot(Vector b)
+        this.dot = function(b) { return this.x*b.x + this.y*b.y + this.z*b.z; }
+        this.magnitude = function() {
+            return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+        }
+        // cross(Vector b)
+        this.cross = function(b) { return new Vector((this.y*b.z - this.z*b.y), 
+                                                     (this.z*b.x - this.x*b.z), 
+                                                     (this.x*b.y - this.y*b.x)); }
+        // getPerp(), Gets a vector perpendicular to this, lying in the x y plane.
+        this.getPerp = function() {
+            if ((this.x==0)&&(this.y==0)) {
+                return new Vector(1, 0, 0);
+            } else {
+                return new Vector(this.y, -this.x, 0);
+            }
+        }
+        // rotate(Vector axis, Number theta)
+        this.rotate = function(axis, theta) {
+            var normAx = axis.scale(1.0/axis.magnitude());
+            var a = this.scale(Math.cos(theta));
+            var b = normAx.cross(this).scale(Math.sin(theta));
+            var c = normAx.scale(this.dot(normAx)).scale(1-Math.cos(theta));
+            return a.add(b).add(c);
+        }
+    }
     
     
     
